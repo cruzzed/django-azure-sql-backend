@@ -266,7 +266,7 @@ Here is an example of the database settings using user and password:
     DATABASE_CONNECTION_POOLING = False
 
 
-Here is an example of the database settings using AAD access token authorization:
+Here is an example of the database settings using AAD access token authentication:
 
 ::
 
