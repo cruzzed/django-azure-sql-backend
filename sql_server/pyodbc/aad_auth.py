@@ -12,7 +12,7 @@ class AADAuth(object):
     """
 
     @classmethod
-    def _get_access_token(cls, authority, client_id, scopes, secret_key):
+    def _get_access_token(cls, authority, client_id, scopes, secret):
         """
         Retrieves the application's access token through AAD.
 
@@ -26,8 +26,8 @@ class AADAuth(object):
         scopest : list
             The list of scopes to use to authenticate. For database
             connections we should be using`["https://database.windows.net//.default"]`.
-        secret_key : str
-            The secret key to authenticate with.
+        secret : str
+            The secret to authenticate with.
 
         Returns
         -------
@@ -35,7 +35,7 @@ class AADAuth(object):
             The retrieved access token if present; otherwise, `None`.
         """
         app = msal.ConfidentialClientApplication(
-            client_id, authority=authority, client_credential=secret_key
+            client_id, authority=authority, client_credential=secret
         )
         result = app.acquire_token_silent(scopes, account=None)
         if not result:
@@ -97,7 +97,7 @@ class AADAuth(object):
         ----------
         config : dict
             The dictionary of values needed to retrieve an application access token.
-            Should contain `tenant_id`, `client_id` and `secret_key`.
+            Should contain `tenant_id`, `client_id` and `secret`.
 
         Returns
         -------
@@ -112,10 +112,10 @@ class AADAuth(object):
         """
         tenant_id = config["tenant_id"]
         client_id = config["client_id"]
-        secret_key = config["secret_key"]
+        secret = config["secret"]
         authority = "https://login.microsoftonline.com/" + tenant_id
         scopes = ["https://database.windows.net//.default"]
-        access_token = cls._get_access_token(authority, client_id, scopes, secret_key)
+        access_token = cls._get_access_token(authority, client_id, scopes, secret)
         if not access_token:
             raise AADAuthAccessTokenRetrievalError("Unable to retrieve access token!")
 

@@ -145,9 +145,9 @@ Dictionary. Current available keys are:
    String. Refers to the registered application client identifier to use.
    It is also known as the application identifier.
 
--  secret_key
+-  secret
 
-   String. Refers to the secret key that will be use to authenticate with AAD.
+   String. Refers to the secret that will be use to authenticate with AAD.
 
 OPTIONS
 ~~~~~~~
@@ -279,7 +279,7 @@ Here is an example of the database settings using AAD access token authenticatio
             'AAD-AUTH': {
                 'tenant_id': '02a2e49f-b581-45c4-84a9-bdee0198b26f',
                 'client_id': '818979f8-a731-48d9-bf42-b00a04e1e618',
-                'secret_key': "MY_SUPER_SECRET_KEY",
+                'secret': "MY_SUPER_SECRET",
             },
             'OPTIONS': {
                 'driver': 'ODBC Driver 13 for SQL Server',
