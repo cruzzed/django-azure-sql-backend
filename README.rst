@@ -2,10 +2,10 @@ django-azure-sql-backend
 ========================
 
 This is a fork from `michiya/django-pyodbc-azure` updated to include authentication through Microsoft AAD access token authentication through application impersonation:
+
 - https://github.com/AzureAD/azure-activedirectory-library-for-python/wiki/Connect-to-Azure-SQL-Database
 - https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-v2-python-webapp
 - https://docs.microsoft.com/en-us/sql/connect/python/pyodbc/step-3-proof-of-concept-connecting-to-sql-using-pyodbc?view=sql-server-ver15
-- 
 
 .. image:: http://img.shields.io/pypi/v/django-pyodbc-azure.svg?style=flat
     :target: https://pypi.python.org/pypi/django-pyodbc-azure
