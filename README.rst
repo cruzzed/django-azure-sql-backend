@@ -1,19 +1,15 @@
 django-azure-sql-backend
 ========================
 
-This is a fork from `michiya/django-pyodbc-azure` updated to include authentication through Microsoft AAD access token authentication through application impersonation:
+.. image:: http://img.shields.io/pypi/v/django-azure-sql-backend.svg?style=flat
+    :target: https://pypi.python.org/pypi/django-azure-sql-backend
 
-- https://github.com/AzureAD/azure-activedirectory-library-for-python/wiki/Connect-to-Azure-SQL-Database
-- https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-v2-python-webapp
-- https://docs.microsoft.com/en-us/sql/connect/python/pyodbc/step-3-proof-of-concept-connecting-to-sql-using-pyodbc?view=sql-server-ver15
-
-.. image:: http://img.shields.io/pypi/v/django-pyodbc-azure.svg?style=flat
-    :target: https://pypi.python.org/pypi/django-pyodbc-azure
-
-.. image:: http://img.shields.io/pypi/l/django-pyodbc-azure.svg?style=flat
+.. image:: http://img.shields.io/pypi/l/django-azure-sql-backend.svg?style=flat
     :target: http://opensource.org/licenses/BSD-3-Clause
 
-*django-pyodbc-azure* is a modern fork of
+*django-azure-sql-backend* is a modern fork of
+`django-pyodbc-azure <https://github.com/michiya/django-pyodbc-azure/>`__
+made to support AAD access token authentication. It is also a fork of
 `django-pyodbc <https://code.google.com/archive/p/django-pyodbc/>`__, a
 `Django <https://www.djangoproject.com/>`__ Microsoft SQL Server external
 DB backend that uses ODBC by employing the
@@ -26,6 +22,7 @@ Features
 -  Supports Django 2.1
 -  Supports Microsoft SQL Server 2008/2008R2, 2012, 2014, 2016, 2017 and
    Azure SQL Database
+-  AAD authentication through registered application access token
 -  Passes most of the tests of the Django test suite
 -  Compatible with
    `Micosoft ODBC Driver for SQL Server <https://docs.microsoft.com/en-us/sql/connect/odbc/microsoft-odbc-driver-for-sql-server>`__,
@@ -43,9 +40,9 @@ Installation
 
 1. Install pyodbc and Django
 
-2. Install django-pyodbc-azure ::
+2. Install django-azure-sql-backend ::
 
-    pip install django-pyodbc-azure
+    pip install django-azure-sql-backend
 
 3. Now you can point the ``ENGINE`` setting in the settings file used by
    your Django application or project to the ``'sql_server.pyodbc'``
@@ -120,6 +117,37 @@ for any given database-level settings dictionary:
    String. The alias of the database that this database should
    mirror during testing. Default value is ``None``.
    See the official Django documentation for more details.
+
+AAD-AUTH
+~~~~~~~~
+
+When provided, ``USER`` and ``PASSWORD`` are not used and AAD authentication using
+application access token is used instead.
+
+References:
+
+-  https://github.com/AzureAD/microsoft-authentication-library-for-python
+-  https://github.com/AzureAD/azure-activedirectory-library-for-python/wiki/Connect-to-Azure-SQL-Database
+-  https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-v2-python-webapp
+-  https://docs.microsoft.com/en-us/sql/connect/python/pyodbc/step-3-proof-of-concept-connecting-to-sql-using-pyodbc?view=sql-server-ver15
+
+
+Dictionary. Current available keys are:
+
+-  tenant_id
+
+   String. Refers to the registered application tenant identifier to use.
+   It is also known as the directory identifier and can sometimes be provided
+   within the STS url like so: ``https://login.microsoftonline.com/<TENANT_ID>/oauth2/v2.0/token``
+
+-  client_id
+
+   String. Refers to the registered application client identifier to use.
+   It is also known as the application identifier.
+
+-  secret_key
+
+   String. Refers to the secret key that will be use to authenticate with AAD.
 
 OPTIONS
 ~~~~~~~
@@ -215,7 +243,7 @@ The following project-level settings also control the behavior of the backend:
 Example
 ~~~~~~~
 
-Here is an example of the database settings:
+Here is an example of the database settings using user and password:
 
 ::
 
@@ -237,6 +265,31 @@ Here is an example of the database settings:
     # set this to False if you want to turn off pyodbc's connection pooling
     DATABASE_CONNECTION_POOLING = False
 
+
+Here is an example of the database settings using AAD access token authorization:
+
+::
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'sql_server.pyodbc',
+            'NAME': 'mydb',
+            'HOST': 'myserver.database.windows.net',
+            'PORT': '',
+            'AAD-AUTH': {
+                'tenant_id': '02a2e49f-b581-45c4-84a9-bdee0198b26f',
+                'client_id': '818979f8-a731-48d9-bf42-b00a04e1e618',
+                'secret_key': "MY_SUPER_SECRET_KEY",
+            },
+            'OPTIONS': {
+                'driver': 'ODBC Driver 13 for SQL Server',
+            },
+        },
+    }
+    
+    # set this to False if you want to turn off pyodbc's connection pooling
+    DATABASE_CONNECTION_POOLING = False
+
 Limitations
 -----------
 
@@ -247,9 +300,9 @@ The following features are currently not supported:
 Notice
 ------
 
-This version of *django-pyodbc-azure* only supports Django 2.1.
+This version of *django-azure-sql-backend* only supports Django 2.1.
 If you want to use it on older versions of Django,
 specify an appropriate version number (2.0.x.x for Django 2.0)
 at installation like this: ::
 
-    pip install "django-pyodbc-azure<2.1"
+    pip install "django-azure-sql-backend<2.1"
